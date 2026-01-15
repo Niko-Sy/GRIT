@@ -1,42 +1,106 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Apple-inspired styles */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Custom styles for the app */
+.comparison-table .ant-table-thead > tr > th {
+  background-color: #fafafa;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e5e5;
+  font-size: 14px;
+  padding: 16px;
 }
 
-@keyframes logo-spin {
+.comparison-table .ant-table-tbody > tr > td {
+  padding: 16px;
+  font-size: 15px;
+}
+
+.comparison-table .ant-table-tbody > tr:hover > td {
+  background-color: #f9fafb !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  letter-spacing: -0.01em;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(30px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.card {
-  padding: 2em;
+/* Audio player styling */
+audio {
+  border-radius: 12px;
+  outline: none;
 }
 
-.read-the-docs {
-  color: #888;
+audio::-webkit-media-controls-panel {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
 }
+
+audio::-webkit-media-controls-play-button {
+  background-color: #1d1d1f;
+  border-radius: 50%;
+}
+
+/* Custom button styles */
+.ant-btn {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
+}
+
+.ant-btn-primary {
+  background-color: #1d1d1f;
+  border-color: #1d1d1f;
+}
+
+.ant-btn-primary:hover {
+  background-color: #000;
+  border-color: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.ant-btn:not(.ant-btn-primary) {
+  background-color: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-btn:not(.ant-btn-primary):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Timeline customization */
+.ant-timeline-item-head {
+  background-color: #1d1d1f;
+}
+
+/* Badge customization */
+.ant-badge {
+  font-size: 12px;
+  font-weight: 500;
+}
+

@@ -1,0 +1,1355 @@
+
+<html>
+
+<head>
+    <title>MuseControlLite</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<meta name="theme-color" content="#563d7c">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+</head>
+
+<body bgcolor="#FFFFFF" link="#000000" vlink="#000000" alink="#000000">
+
+<div class="text-center">
+    <br>
+    <div class="text-wrap" width="200px">
+    <font face="helvetica , ariel, &#39;sans serif&#39;" size="6">
+        <b>MuseControlLite:</br>Multifunctional Music Generation with Lightweight Conditioners</b><br><br>
+    </font>
+    </div>
+
+    <p style="font-size: 1.3em; margin-bottom: 0;">
+        <a href="https://fundwotsai2001.github.io/mywebsite/"> Fang-Duo Tsai<sup>1</sup> </a>&nbsp;
+        <a href="https://slseanwu.github.io/"> Shih-Lun Wu<sup>2</sup> </a>&nbsp;
+        Weijaw Lee <sup>1</sup></a> &nbsp;
+        Sheng-Ping Yang <sup>1</sup></a> &nbsp;
+        Bo-Rui Chen <sup>1</sup></a> &nbsp;
+        <a href="http://www.hao-chung.info/"> Hao-Chung Cheng<sup>1</sup></a> &nbsp;
+        <a href="https://affige.github.io/"> Yi-Hsuan Yang<sup>1</sup></a> &nbsp;
+    </p> 
+    <p style="margin-top: 0;">
+        <sup>1</sup>National Taiwan University<br>
+        <sup>2</sup>Massachusetts Institute of Technology<br>
+    </p>
+
+    <div class="m-5">
+        <a class="btn btn-outline-dark" href="https://www.arxiv.org/abs/2506.18729" type="button"><i
+                class="bi bi-newspaper"></i> Paper</a>
+        <a class="btn btn-outline-dark" href="https://github.com/fundwotsai2001/MuseControlLite" type="button">
+            <i class="bi bi-github"></i> GitHub
+        </a>
+        <a
+            class="btn btn-outline-dark"
+            href="https://colab.research.google.com/drive/1rR-Ncng_gSeb6hX0LY20SA4O9RCF-ZF3"
+            target="_blank"
+            rel="noopener"
+            type="button"
+        >
+            <img
+            src="https://colab.research.google.com/img/colab_favicon_256px.png"
+            alt="Colab"
+            style="width:1em; height:1em; margin-right:0.25em; vertical-align:middle;"
+            >
+            Colab
+        </a>
+    </div>
+
+    <div class="section text-justify">
+        <h1>Updated (2025/9/2) Singing Accompaniment Generation</h1>
+        <section class="pr-5 pl-5 text-justify">
+            <p> Demonstrating Singing accompaniment capabilities for MuseControlLite, accepted by The Thirty-Ninth Annual Conference on Neural Information Processing Systems (Neurips Music4AI workshop demo), 2025.</p>
+            <p> Code will be released soon.</p>
+            <ul>
+                <li><strong>Input condition: Vocal melody, Rhythm, Key, Structure</strong></li>
+                <li><strong>Output: Backing <track></track></strong></li>
+                <a href="https://openreview.net/forum?id=yBxepy8IG3"> Demo paper </a>&nbsp;
+                
+            </ul>
+        </section>
+    </div>
+    <style>
+    .sag-wrap { max-width: 100%; }
+
+    /* Make the table stop growing horizontally */
+    .sag-table {
+        width: 100%;
+        table-layout: fixed; /* key */
+    }
+
+    .sag-table td,
+    .sag-table th {
+        vertical-align: middle;
+        overflow: hidden;
+        padding: .35rem .45rem; /* slim padding */
+    }
+
+    /* Audio is usually the #1 reason it becomes wide */
+    .sag-table audio {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important; /* allow shrink */
+    }
+
+    /* Prompt text: wrap nicely and don't force width */
+    .prompt {
+        margin: 0;
+        font-size: .95rem;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        line-height: 1.25;
+    }
+
+    /* Slim headings inside table */
+    .sag-table h5 {
+        margin: 0;
+        font-size: 1rem;
+    }
+    </style>
+
+    <div class="table-responsive sag-wrap">
+    <table class="table table-sm table-sum text-center align-middle sag-table mb-2">
+        <tbody>
+        <tr>
+            <td colspan="15">
+            <h5 class="text-center">Singing Accompaniment Generation</h5>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"></td>
+            <td colspan="10"><h5>Vocal audio</h5></td>
+        </tr>
+
+        <tr>
+            <td colspan="5"></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="hands_sliced.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simple_love_slice.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5">
+            <h5>Text Prompt</h5>
+            </td>
+            <td colspan="10">
+            <h5>Singing accompaniment with the given vocal</h5>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">country music backing track</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_0.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_0.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Joyful rock band</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Jazzy piano, with an exciting vibe, trumpet, drums</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Reggae style</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_4.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_4.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Uplifting orchestral background with light strings, piano arpeggios, and a hopeful mood.</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_5.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_5.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Mellow acoustic folk with guitar, banjo, and light percussion</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_6.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_6.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Energetic pop rock with electric guitars, bass, and upbeat drums</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_7.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_7.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Smooth jazz combo with saxophone, piano, upright bass, and brushes</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_8.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_8.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Funky groove with slap bass, electric piano, and tight drumbeat</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_10.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_10.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="5"><p class="prompt">Dreamy ambient soundscape with synth pads, soft piano, and airy textures</p></td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="handstext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_12.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+            <td colspan="5">
+            <audio controls preload="none">
+                <source src="simpletext_7.0_con_1.5_rhythm_melody_key_strucure_0.3_500/mixed_12.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="container mt-4" style="max-width: 1000px;">
+        <div class="container">
+            <div class="container mt-4 " style="max-width: 950px;">
+                <div class="container">
+                    <div class="section">
+                        <br>
+                        <h1 class="text-justify">Abstract</h1>
+                        <hr>
+                        <p class="pr-5 pl-5 text-justify">
+                        We propose MuseControlLite, a lightweight mechanism designed to fine-tune text-to-music generation models
+                        for precise conditioning using various time-varying musical attributes and reference audio signals. 
+                        The key finding is that positional embeddings, which have been seldom used by text-to-music generation
+                        models in the conditioner for text conditions, are critical when the condition of interest is a function
+                        of time. Using melody control as an example, our experiments show that simply adding rotary positional
+                        embeddings to the decoupled cross-attention layers increases control accuracy from 56.6% to 61.1%, while 
+                        requiring 6.75 times fewer trainable parameters than state-of-the-art fine-tuning mechanisms, using the same 
+                        pre-trained diffusion Transformer model of Stable Audio Open. We evaluate various forms of musical attribute 
+                        control, audio inpainting, and audio outpainting, demonstrating improved controllability over MusicGen-Large 
+                        and Stable Audio Open ControlNet at a significantly lower fine-tuning cost, with only 85M trainble parameters. 
+                        Source code, model checkpoints, and demo examples are available at: https://musecontrollite.github.io/web/.
+                        </p>
+                    </div><br>
+
+                    <!-- Show bibtext -->
+                    <div class="section text-left" div style='text-align:left'>
+                        <h1>Bibtex</h1>
+                        <div style="background-color: #e9ecef; text-align:left;" >
+                        <pre>
+                <code>
+                @misc{tsai2025musecontrollitemultifunctionalmusicgeneration,
+                    title={MuseControlLite: Multifunctional Music Generation with Lightweight Conditioners}, 
+                    author={Fang-Duo Tsai and Shih-Lun Wu and Weijaw Lee and Sheng-Ping Yang and Bo-Rui Chen and Hao-Chung Cheng and Yi-Hsuan Yang},
+                    year={2025},
+                    eprint={2506.18729},
+                    archivePrefix={arXiv},
+                    primaryClass={cs.SD},
+                    url={https://arxiv.org/abs/2506.18729}, 
+                }</code>
+                  </pre>
+                  </div>
+                </div>
+            
+            <div class="section text-justify">
+                <h1>Melody-conditioned Comparison</h1>
+                    <section class="pr-5 pl-5 text-justify">
+                        <p>The melody-conditioned comparison includes four baselines:</p>
+                        <ul>
+                            <li><strong>Stable-audio ControlNet</strong></li>
+                            <li><strong>MusicGen-stereo-Large</strong></li>
+                            <li><strong>Ours (v1)</strong></li>
+                            <li><strong>Ours (v2)</strong></li>
+                            <li><strong>Ours (v3)</strong></li>
+                        </ul>
+                        <p>We further classify the models</p>
+                        <h3>Details on Each Baseline</h3>
+                        <p><strong>Ours (v1):</strong> Uses a one-hot 12-pitch-class chromagram as the condition, the same as MusicGen, which both the reviewers and we found to be perceptually poor.</p>
+                        
+                        <p><strong>Ours (v2):</strong> Uses a top-4 128-pitch-class CQT as the condition, objective and subjective evaluation in the paper are this version.</p>
+
+                        <p><strong>Ours (v3):</strong> Uses a top-4 128-pitch-class CQT as the condition, but processes the melody of the two audio channels separately, this results in melody acuracy 7.6 % higher then ControlNet in the no singing Song Describer Dataset.</p>
+                        
+                        <p><strong>Pretrained Backbone (Original Stable-audio):</strong> We also include samples generated by the original Stable-audio Open only with text condition to showcase the expressiveness of 
+                            the pretrained backbone.</p>
+                        </section>
+                <table class="table table-sum text-center" style="vertical-align; middle;">
+                    <tbody>
+                        <tr>
+                            <td colspan="35">
+                                <h5 class="text-center">Melody Control</h5>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td colspan="5">
+                                <h5>Reference</h5>
+                            </td>
+                            <td colspan="5" style="padding-left: 150px; padding-right: 150px;">
+                                <h5>Text Prompt</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>Ours(v3)</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>Ours(v2)</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>Stable Audio ControlNet</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>MusicGen Stereo Large</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>Ours(v1)</h5>
+                            </td>
+                            <td colspan="5">
+                                <h5>Original Stable Audio</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="3" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>A heartfelt, warm acoustic guitar performance, evoking a sense of tenderness and deep emotion, with a melody that truly resonates and touches the heart.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/49_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/49_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/49_0.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/49_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/49_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>A vibrant MIDI electronic composition with a hopeful and optimistic vibe.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_1.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/49_1.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/49_1.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/49_1.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/49_1.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/49_1.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>This track composed of electronic instruments gives a sense of opening and clearness.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_2.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/49_2.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/49_2.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/49_2.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/49_2.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/49_2.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="3" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>This track composed of electronic instruments gives a sense of opening and clearness.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/322_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/322_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/322_3.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/322_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/322_3.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>Hopeful instrumental with guitar being the lead and tabla used for percussion in the middle giving a feeling of going somewhere with positive outlook.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_4.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/322_4.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/322_4.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/322_4.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/322_4.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/322_4.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>A string ensemble opens the track with legato, melancholic melodies. The violins and violas play beautifully, while the cellos and bass provide harmonic support for the moving passages. The overall feel is deeply melancholic, with an emotionally stirring performance that remains harmonious and a sense of clearness.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_5.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/322_5.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/322_5.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/322_5.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/322_5.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/322_5.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="2" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>An exceptionally harmonious string performance with a lively tempo in the first half, transitioning to a gentle and beautiful melody in the second half. It creates a warm and comforting atmosphere, featuring cellos and bass providing a solid foundation, while violins and violas showcase the main theme, all without any noise, resulting in a cohesive and serene sound.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/610_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/610_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/610_6.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/610_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/610_6.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>Pop solo piano instrumental song. Simple harmony and emotional theme. Makes you feel nostalgic and wanting a cup of warm tea sitting on the couch while holding the person you love.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_7.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/610_7.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/610_7.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/610_7.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/610_7.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/610_7.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="2" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>A whimsical string arrangement with rich layers, featuring violins as the main melody, accompanied by violas and cellos. The light, playful melody blends harmoniously, creating a sense of clarity.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/785_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/785_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/785_8.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/785_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/785_8.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>An instrumental piece primarily featuring acoustic guitar, with a lively and nimble feel. The melody is bright, delivering an overall sense of joy.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/785_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/785_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/785_9.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/785_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/785_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="2" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>A joyful saxophone performance that is smooth and cohesive, accompanied by cello. The first half features a relaxed tempo, while the second half picks up with an upbeat rhythm, creating a lively and energetic atmosphere. The overall sound is harmonious and clear, evoking feelings of happiness and vitality.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/933_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/933_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/933_10.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/933_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/933_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>A cheerful piano performance with a smooth and flowing rhythm, evoking feelings of joy and vitality.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/933_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/933_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/933_11.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/933_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/933_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" rowspan="2" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>An instrumental piece primarily featuring piano, with a lively rhythm and cheerful melodies that evoke a sense of joyful childhood playfulness. The melodies are clear and bright.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/1069_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/1069_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/1069_12.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/1069_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/1069_12.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p>fast and fun beat-based indie pop to set a protagonist-gets-good-at-x movie montage to.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_13.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/1069_13.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/1069_13.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/1069_13.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/1069_13.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/1069_13.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>A lively 70s style British pop song featuring drums, electric guitars, and synth violin. The instruments blend harmoniously, creating a dynamic, clean sound without any noise or clutter.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/57_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/57_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/57_14.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/57_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/57_14.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/condition_audio/original_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5">
+                                <p>A soothing acoustic guitar song that evokes nostalgia, featuring intricate fingerpicking. The melody is both sacred and mysterious, with a rich texture.</p>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="stereo_melody/test_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v2_7.0_1.0_melody/703_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Stable_audio_controlnet/703_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/MusicGen/703_15.wav.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Ours_v1_7.0_1.5_melody/703_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="5" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="melody_condition_comparison/Original_stable_audio/703_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-sum text-center" style="vertical-align; middle;">
+                    <div class="section text-justify">
+                        <h1>Audio Outpainting Comparison</h1>
+                        <section class="pr-5 pl-5 text-justify">
+                            <p>The Audio Outpainting comparison includes two baselines:</p>
+                            <ul>
+                              <li><strong>MusicGen-stereo-medium</strong></li>
+                              <li><strong>Ours</strong></li>
+                            </ul>
+                            
+                           <p>We provide the first 15 seconds as a reference, and both baselines will generate the next 15 seconds.
+                             Neither of them used additional conditions, including text or melody.
+                           </p>
+                          </section>
+                          
+                    <tbody>
+                        <tr>
+                            <td colspan="24">
+                                <h5 class="text-center">Music Continuation</h5>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td colspan="8">
+                                <h5>Reference</h5>
+                            </td>
+                            <td colspan="8">
+                                <h5>MusicGen</h5>
+                            </td>
+                            <td colspan="8">
+                                <h5>Ours</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/859_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/859_0.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/572_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/572_9.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/723_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/723_10.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/438_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/438_11.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/768_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/768_15.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_16.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/590_16.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/590_16.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_21.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/687_21.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/687_21.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/original_15s/original_25.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/musicgen_continuation/190_25.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td colspan="8" style="vertical-align: middle;">
+                                <audio controls>
+                                <source src="Continuation_random/Ours_continuation_50_7.0_1.5_1.0_audio/190_25.wav" type="audio/wav">
+                                Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <footer>
+                <div class="container">
+                    <div class="text-center">
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // Add JavaScript to toggle the collapsible content
+    var buttons = document.querySelectorAll(".collapsible-button");
+    buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    });
+
+</script>
+									
+</body>
+
+</html>
