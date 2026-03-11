@@ -6,13 +6,13 @@ import { GithubOutlined, FileTextOutlined, ExperimentOutlined } from '@ant-desig
 const Hero = () => {
   return (
     <motion.div 
-      className="text-center py-12 md:py-20 px-6 md:px-12 max-w-7xl mx-auto"
+      className="text-center pt-12 md:pt-16 px-6 md:px-12 max-w-7xl mx-auto"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
       <motion.h1 
-        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 tracking-tight"
+        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-gray-900 tracking-tight"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}
@@ -21,7 +21,7 @@ const Hero = () => {
         GRIT: Multi-track Music Generation 
       </motion.h1>
       <motion.h2 
-        className="text-2xl md:text-3xl lg:text-4xl font-normal mb-12 text-gray-600 max-w-4xl mx-auto"
+        className="text-2xl md:text-3xl lg:text-4xl font-normal mb-4 text-gray-600 max-w-4xl mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.6 }}
@@ -30,7 +30,7 @@ const Hero = () => {
       </motion.h2>
       
       <motion.div 
-        className="text-base md:text-lg text-gray-500 mb-8 max-w-3xl mx-auto"
+        className="text-base md:text-lg text-gray-500 mb-2 max-w-3xl mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.6 }}
@@ -47,7 +47,7 @@ const Hero = () => {
       </motion.div>
 
       <motion.div 
-        className="flex flex-wrap justify-center gap-4 mt-12"
+        className="flex flex-wrap justify-center gap-4 mt-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}

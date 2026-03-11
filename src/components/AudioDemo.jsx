@@ -1,15 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from 'antd';
+import sample1 from '../assets/inference_0.mp3';
 
 const audioSamples = [
   {
     id: 1,
     title: 'Sample 1: Classical Style',
-    description: 'Piano composition with C Major - G Major - A Minor - F Major progression',
-    audioUrl: '#',
+    description: 'Multitrack Piano composition with rich harmonies and dynamics',
+    audioUrl: sample1,
     tag: 'Classical',
-    highlight: true
+    highlight: false
   },
   {
     id: 2,
@@ -17,7 +18,7 @@ const audioSamples = [
     description: 'Jazz-inspired piece with complex chord progressions',
     audioUrl: '#',
     tag: 'Jazz',
-    highlight: true
+    highlight: false
   },
   {
     id: 3,
@@ -82,7 +83,7 @@ const AudioDemo = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        Audio Demonstrations
+        More Audio Demonstrations
       </motion.h2>
 
       <motion.div 
@@ -93,10 +94,10 @@ const AudioDemo = () => {
         viewport={{ once: true }}
       >
         {audioSamples.map((sample) => (
-          <motion.div key={sample.id} variants={itemVariants}>
+          <motion.div key={sample.id} variants={itemVariants} className="h-full">
             <div 
-              className={`rounded-3xl p-6 transition-all duration-300 ${
-                sample.highlight ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200'
+              className={`rounded-3xl p-6 transition-all duration-300 h-full flex flex-col ${
+                sample.highlight ? 'bg-gray-800 text-white' : 'bg-white border border-gray-200'
               }`}
             >
               <div className="flex items-start justify-between mb-4">
@@ -106,29 +107,31 @@ const AudioDemo = () => {
                   {sample.title}
                 </h3>
                 <Badge 
-                  color={sample.highlight ? 'white' : 'default'} 
-                  text={sample.tag}
-                  className="ml-2"
+                  color={sample.highlight ? 'white' : 'black'} 
+                  text={sample.tag }
+                  className="ml-2 flex-shrink-0"
                 />
               </div>
-              <p className={`text-base mb-6 leading-relaxed ${
+              <p className={`text-base mb-6 leading-relaxed line-clamp-2 flex-grow ${
                 sample.highlight ? 'text-gray-300' : 'text-gray-600'
               }`}>
                 {sample.description}
               </p>
-              <audio 
-                controls 
-                className="w-full rounded-xl"
-                style={{ height: '48px' }}
-              >
-                <source src={sample.audioUrl} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
-              {sample.highlight && (
-                <div className="mt-3 text-sm text-gray-300 font-medium">
-                  ★ Featured Sample
-                </div>
-              )}
+              <div className="mt-auto">
+                <audio 
+                  controls 
+                  className="w-full rounded-xl"
+                  style={{ height: '48px' }}
+                >
+                  <source src={sample.audioUrl} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
+                {sample.highlight && (
+                  <div className="mt-3 text-sm text-gray-300 font-medium">
+                    ★ Featured Sample
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         ))}

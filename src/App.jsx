@@ -2,6 +2,7 @@ import React from 'react';
 import { ConfigProvider } from 'antd';
 import Hero from './components/Hero';
 import Abstract from './components/Abstract';
+import MainDemo from './components/MainDemo';
 import Method from './components/Method';
 import AudioDemo from './components/AudioDemo';
 import Comparison from './components/Comparison';
@@ -21,7 +22,8 @@ function App() {
       <div className="min-h-screen bg-white">
         <Hero />
         <Abstract />
-        <Method />
+        {/* <Method /> */}
+        <MainDemo />
         <AudioDemo />
         <Comparison />
         <Footer />
